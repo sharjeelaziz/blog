@@ -37,27 +37,27 @@ Setting up a test Jenkins instance is great for experimenting with and testing y
 
 - **Job Script**: We’ll use a simple script [hello-world-job.sh](hello-world-job/hello-world-job.sh) that randomly succeeds or fails to show how Jenkins handles different outcomes. Also, it takes variable amount of time to complete. You can modify to your liking but it is helful in populating jenkins with builds for us. Here’s what the script looks like:
 
-    ```bash
-    #!/bin/bash
+```bash
+#!/bin/bash
 
-    execution_time=$((RANDOM % 5 + 1))
+execution_time=$((RANDOM % 5 + 1))
 
-    execution_time_seconds=$((execution_time * 60))
+execution_time_seconds=$((execution_time * 60))
 
-    failure_chance=$((RANDOM % 100 + 1))
+failure_chance=$((RANDOM % 100 + 1))
 
-    echo "Deployment will take will $execution_time minutes."
-    sleep $execution_time_seconds
+echo "Deployment will take will $execution_time minutes."
+sleep $execution_time_seconds
 
-    # Check if deployment should fail (10% chance)
-    if [ $failure_chance -le 10 ]; then
-    echo "Tests failed!"
-    exit 1
-    else
-    echo "All tests passed!"
-    exit 0
-    fi
-    ```
+# Check if deployment should fail (10% chance)
+if [ $failure_chance -le 10 ]; then
+  echo "Tests failed!"
+  exit 1
+else
+  echo "All tests passed!"
+  exit 0
+fi
+ ```
 
 - **Put the Script to Work**: Add this script as an "Execute Shell" step in the "Build Steps" section of your job settings in Jenkins.
 
