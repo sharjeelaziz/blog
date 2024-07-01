@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DORA: Hello World - Change Failure Rate (%)</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>DORA: Hello World - Change Failure Rate (%)</h1>
+    <canvas id="changeFailureRateChart" width="600" height="300"></canvas>
+
+    <h2>Monthly Build Data</h2>
+    <table border="1">
+        <tr>
+            <th>Month</th>
+            <th>Total Builds</th>
+            <th>Failed Builds</th>
+            <th>Change Failure Rate (%)</th>
+        </tr>
+        {% for item in month_data %}
+        <tr>
+            <td>{{ item.month }}</td>
+            <td>{{ item.total_builds }}</td>
+            <td>{{ item.failed_builds }}</td>
+            <td>{{ item.rate }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <script>
+        const ctx = document.getElementById('changeFailureRateChart').getContext('2d');
+        const changeFailureRateChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ month_data | map(attribute='month') | list | tojson }},
+                datasets: [{
+                    label: 'Change Failure Rate',
+                    data: {{ month_data | map(attribute='rate') | list | tojson }},
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                    yAxisID: 'y',
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Change Failure Rate (%)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                    }
+                },
+                animation: {
+                    duration: 1000, // 1000ms = 1 second
+                    easing: 'easeInOutQuad', // An easing function
+                    onProgress: function(animation) {
+                        console.log(`Progress: ${animation.currentStep / animation.numSteps}`);
+                    },
+                    onComplete: function() {
+                        console.log('Animation completed');
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
