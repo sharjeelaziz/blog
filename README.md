@@ -1,2 +1,2 @@
-# foreops blog
+# [foreops blog](https://foreops.com)
 
